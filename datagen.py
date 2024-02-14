@@ -3,26 +3,35 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from tifffile import imread
-from csbdeep.utils import download_and_extract_zip_file, plot_some
+
+from csbdeep.utils import plot_some
 from csbdeep.data import RawData, create_patches
 
-download_and_extract_zip_file(
-    url='/Users/sereenabhanji/Downloads/Condition_1_strainUM679_40xObjective.zip',
-    targetdir='data',
-)
+'''
+
+y = imread('C:/Users/GerholdLab/Sereena/Condition_3_strainUM793_40xObjective/High_Res/2024_01_18_um793_1001-2.tif')
+x = imread('C:/Users/GerholdLab/Sereena/Condition_3_strainUM793_40xObjective/Low_Res/2024_01_18_um793_1001-2.tif')
+print('image size =', x.shape)
+
+plt.figure(figsize=(16,10))
+plot_some(np.stack([x,y]),
+          title_list=[['low (maximum projection)','GT (maximum projection)']], 
+          pmin=2,pmax=99.8);
+
+'''
 
 raw_data = RawData.from_folder(
-    basepath='data/tribolium/train',
-    source_dirs=['low'],
-    target_dir='GT',
+    basepath='C:/Users/GerholdLab/Sereena/Condition_3_strainUM793_40xObjective',
+    source_dirs=['low_Res'],
+    target_dir='High_Res',
     axes='ZYX',
 )
 
 X, Y, XY_axes = create_patches(
     raw_data=raw_data,
     patch_size=(16, 64, 64),
-    n_patches_per_image=1024,
-    save_file='data/my_training_data.npz',
+    n_patches_per_image=20,
+    save_file='C:/Users/GerholdLab/Sereena/Condition_3_strainUM793_40xObjective/data/my_training_data.npz',
 )
 assert X.shape == Y.shape
 print("shape of X,Y =", X.shape)
